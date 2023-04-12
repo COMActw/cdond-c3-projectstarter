@@ -244,10 +244,6 @@ jobs:
           at: ~/
       - install_ansible
       - run:
-          name: Install dependencies
-          command: |
-            apk add --update tar gzip ansible
-      - run:
           name: Configure server
           command: |
             # Your code here
