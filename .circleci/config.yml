@@ -280,9 +280,10 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
+            sudo npm install -g npm@latest
+            rm -rf node_modules
             npm install
             npm run build
-            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment
       - revert-migrations
@@ -308,11 +309,13 @@ jobs:
             npm run build
             cd ..
             cd .circleci/ansible
+            mkdir files
+            cd files
             tar -C ../../../backend -czvf artifact.tar.gz .
             cd ../
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml -v
+            ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
 
@@ -330,7 +333,7 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
-            export API_URL=http://${BACKEND_PUBLIC_IP}:3030
+            export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
             echo ${BACKEND_PUBLIC_IP}
             echo backend-${CIRCLE_WORKFLOW_ID:0:7}
             echo ${API_URL}
@@ -343,9 +346,9 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com"
             echo ${URL}
-            if curl -s $URL | grep "Welcome"
+            if curl -s ${URL} | grep "Welcome"
             then
                 # Change this to 0 after the job fails
               exit 0
