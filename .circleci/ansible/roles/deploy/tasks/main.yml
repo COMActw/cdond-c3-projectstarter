@@ -12,11 +12,13 @@
 - name: Install dependencies
   shell: |
     cd ~/backend-app
-    npm install
+    npm i
 
 - name: Executing node
   shell: |
-    cd ~/backend-app
+    cd ~/backend-app/dist
+
+    cd ../
     npm install
     npm run build
     sudo npm install forever -g
