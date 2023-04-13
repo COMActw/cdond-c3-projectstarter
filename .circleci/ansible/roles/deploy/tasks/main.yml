@@ -16,9 +16,7 @@
 
 - name: Executing node
   shell: |
-    cd ~/backend-app/dist
-
-    cd ../
+    cd ~/backend-app
     npm install
     npm run build
     sudo npm install forever -g
