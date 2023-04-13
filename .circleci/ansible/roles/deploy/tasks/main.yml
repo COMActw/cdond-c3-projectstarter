@@ -19,9 +19,7 @@
     cd ~/backend-app
     npm install
     npm run build
-    sudo npm install forever -g
-    sudo npm install ts-node -g
-    forever start -c "ts-node -r tsconfig-paths/register -r dotenv/config scr/main.ts" ./
+    pm2 start npm -- start
   register: execute_node
 
 - name: Print message
