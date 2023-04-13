@@ -1,7 +1,7 @@
 ---
 - name: Creates directory
   file:
-    path: ~/backend_dir
+    path: ~/backend-app
     state: directory
 
 - name: Extract artifact
