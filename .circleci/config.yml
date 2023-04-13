@@ -352,8 +352,8 @@ jobs:
             else
               exit 1
             fi
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
 
   cloudfront-update:
     docker:
@@ -375,8 +375,8 @@ jobs:
                     --template-file .circleci/files/cloudfront.yml \
                     --stack-name InitialStack \
                     --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
-      # - destroy-environment
-      # - revert-migrations
+      - destroy-environment
+      - revert-migrations
 
   cleanup:
     docker:
