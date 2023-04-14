@@ -19,7 +19,20 @@
     cd ~/backend-app
     npm install
     npm run build
-    pm2 start npm -- start
+    pm2 stop all
+    pm2 start npm --name "udapeople-backend" -- run start
+
+- name: "Set pm2 start as service"
+  become: yes
+  shell: |
+    env PATH=$PATH:/usr/local/bin pm2 startup -u ubuntu
+
+- name: check pm2 status
+  become: yes
+  shell: |
+    pm2 describe "udapeople-backend"
+  register: command_output_npm
+- debug: var=command_output_npm.stdout_lines
 
 - name: Sleep 10s to wait server before smoke-test
   ansible.builtin.pause:

@@ -277,11 +277,13 @@ jobs:
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/environment.txt
             cat frontend/.env
       - run:
           name: Deploy frontend objects
           command: |
             cd frontend
+            cat environment.txt
             npm install
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
@@ -307,7 +309,7 @@ jobs:
             cd backend
             npm i
             npm run build
-            cd ..
+            cd ../
             cd .circleci/ansible
             mkdir files
             cd files
@@ -350,7 +352,7 @@ jobs:
             echo $URL
             if curl -s $URL | grep "Welcome"
             then
-              exit 0
+              exit 1
             else
               exit 1
             fi
